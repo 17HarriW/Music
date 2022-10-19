@@ -9,7 +9,7 @@ namespace Music
     class Notation
     {
         // Note number
-        private int NoteNumber;
+        public int Duration;
 
         /// <summary>
         /// Plays note

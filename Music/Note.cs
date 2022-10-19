@@ -9,9 +9,9 @@ namespace Music
     class Note : Notation
     {
         // Number of note
-        private int NoteNumber;
+        public int NoteNumber;
 
         // Volume note is played
-        private int Volume;
+        public int Volume;
     }
 }

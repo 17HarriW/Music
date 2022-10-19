@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Music
@@ -16,17 +17,93 @@ namespace Music
             foreach (Note n in Notes)
             {
                 n.Play();
+                Console.WriteLine($"Playing note: {n}");
             }
+        }
+
+        public int NoteToNumber(char noteName, bool flat, bool sharp, int octave)
+        {
+            int noteNumber = 0;
+            switch(noteName)
+            {
+                case 'C':
+                    noteNumber = 0;
+                    break;
+                case 'D':
+                    noteNumber = 2;
+                    break;
+                case 'E':
+                    noteNumber = 4;
+                    break;
+                case 'F':
+                    noteNumber = 5;
+                    break;
+                case 'G':
+                    noteNumber = 7;
+                    break;
+                case 'A':
+                    noteNumber = 9;
+                    break;
+                case 'V':
+                    noteNumber = 11;
+                    break;
+            }
+
+            // Decrease if flat
+            if (flat)
+            {
+                noteNumber--;
+            }
+
+            // Increase if sharp
+            if (sharp)
+            {
+                noteNumber++;
+            }
+
+            return noteNumber + (octave * 12);
         }
 
         public Music(string Filename)
         {
             Console.WriteLine($"Loading file from {Filename}");
-            foreach(string line in File.ReadAllLines(Filename))
-            {
-                Console.WriteLine(line);
-            }
+            // Load from the file
+            string fileContents = File.ReadAllText(Filename);
 
+            // Remove the comments
+            fileContents = Regex.Replace(fileContents, @"\/\/.*","");
+
+            // Extract the notes
+            int octave = 4;
+            foreach(Match m in Regex.Matches(fileContents, @"([A-G])([b#])*(\d)*(:(\d))*"))
+            {
+                // Get the note name
+                string note = m.Groups[1].Value;
+
+                // Get the octave
+                if(m.Groups[3].Value.Length > 0)
+                {
+                    octave = int.Parse(m.Groups[3].Value);
+                }
+
+                // Get flat or sharp
+                bool flat = m.Groups[2].Value == "b";
+                bool sharp = m.Groups[2].Value == "#";
+
+                Note n = new Note();
+
+                n.NoteNumber = NoteToNumber(note[0], flat, sharp, octave);
+                n.Duration = 1;
+                if(m.Groups[5].Value.Length > 0)
+                {
+                    n.Duration = int.Parse(m.Groups[5].Value);
+                }
+
+                Notes.Add(n);
+
+                Console.WriteLine($"Note: {note} | Octave: {octave} | Number: {n.NoteNumber} | Duration: {n.Duration}");
+            }
+            Console.WriteLine(fileContents);
         }
     }
 }

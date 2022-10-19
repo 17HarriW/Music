@@ -10,7 +10,8 @@ namespace Music
     {
         static void Main(string[] args)
         {
-            Music Music("Music.txt");
+            Music masterpiece = new Music("Music.txt");
+            masterpiece.Play();
         }
     }
 }
