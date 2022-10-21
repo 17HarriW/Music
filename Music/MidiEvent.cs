@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace Music
 {
-    class MidiEvent
+    abstract class MidiEvent
     {
         // Bytes that are sent as MIDI data
-        private byte[] buffer = new byte[3];
+        protected byte[] buffer = new byte[3];
 
         // 16 Channels to select from. Channel 9 is percussion
-        private int Channel;
+        protected int Channel;
 
         /// <summary>
         /// Sends MIDI data
         /// </summary>
         public void Send()
         {
-            Console.WriteLine("Implement sending MIDI data");
+            Console.WriteLine("Implement this");
         }
     }
 }
