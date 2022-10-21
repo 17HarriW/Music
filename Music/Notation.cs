@@ -16,7 +16,7 @@ namespace Music
         /// </summary>
         public void Play()
         {
-            Console.WriteLine("Implement playing a note");
+            
         }
     }
 }
